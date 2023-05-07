@@ -1,6 +1,6 @@
 package co.edu.uniquindio.proyectofinal.controllers;
 
-import co.edu.uniquindio.proyectofinal.models.UserLogin;
+import co.edu.uniquindio.proyectofinal.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -8,21 +8,16 @@ import javax.swing.JOptionPane;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 
 
-import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LoginController {
@@ -48,7 +43,7 @@ public class LoginController {
         String test = "";
         Stage stage = new Stage();
 
-        UserLogin userLogin = new UserLogin();
+        User userLogin = new User();
         if (txtUserName.getText().equals("") && txtPassword.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "los Campos no pueden estar vacios");
         } else {
@@ -60,6 +55,12 @@ public class LoginController {
                     Scene scene = new Scene(fxmlLoader.load());
                     stage.setTitle("Login");
                     stage.setScene(scene);
+                    // Obtiene la escena actual
+                    Scene currentScene = ((Node) event.getSource()).getScene();
+                    // Obtiene el Stage actual
+                    Stage currentStage = (Stage) currentScene.getWindow();
+                    // Cierra el Stage actual
+                    currentStage.close();
                     stage.show();
                     //((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (IOException e) {
@@ -74,7 +75,6 @@ public class LoginController {
 
         }
     }
-
 
 
     @FXML

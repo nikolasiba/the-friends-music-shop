@@ -6,16 +6,16 @@ import co.edu.uniquindio.proyectofinal.persistence.UsefullFile;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class UserLogin {
+public class User {
 
     String userName;
     String password;
     String type;
 
-    public UserLogin() {
+    public User() {
     }
 
-    public UserLogin(String userName, String password, String type) {
+    public User(String userName, String password, String type) {
         this.userName = userName;
         this.password = password;
         this.type = type;
@@ -56,7 +56,7 @@ public class UserLogin {
 
     public String singIn(String userName, String password) throws IOException {
         String type = "";
-        ArrayList<UserLogin> users = new ArrayList<UserLogin>();
+        ArrayList<User> users = new ArrayList<User>();
         ArrayList<String> contenido = null;
         try {
             contenido = UsefullFile.leerArchivo("src/main/resources/persistence/Users.txt");
@@ -67,7 +67,7 @@ public class UserLogin {
 
         for (int i = 0; i < contenido.size(); i++) {
             linea = contenido.get(i);
-            UserLogin userLogin = new UserLogin();
+            User userLogin = new User();
             userLogin.setUserName(linea.split("#")[0]);
             userLogin.setPassword(linea.split("#")[1]);
             userLogin.setType(linea.split("#")[2]);
