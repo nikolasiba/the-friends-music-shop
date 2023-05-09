@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="562.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.proyectofinal.controllers.AdminController">
    <children>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -105,25 +104,17 @@
                            </font>
                         </Label>
                         <TextField fx:id="txtUrl" layoutX="170.0" layoutY="301.0" />
-                        <Button fx:id="btnCreateSong" layoutX="372.0" layoutY="313.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="165.0" text="Crear Cancion">
+                        <Button fx:id="btnCreateSong" layoutX="372.0" layoutY="313.0" mnemonicParsing="false" onAction="#createSong" prefHeight="38.0" prefWidth="165.0" text="Crear Cancion">
                            <font>
                               <Font name="Times New Roman Bold" size="20.0" />
                            </font>
                         </Button>
-                        <MenuButton fx:id="dbtnSelectArtist" layoutX="333.0" layoutY="23.0" mnemonicParsing="false" onAction="#selectArtist" prefHeight="44.0" prefWidth="220.0" text="Seleccione un artista">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                           <font>
-                              <Font name="Times New Roman Bold" size="18.0" />
-                           </font>
-                        </MenuButton>
                         <Button fx:id="btnLoadImage" layoutX="170.0" layoutY="102.0" mnemonicParsing="false" onAction="#loadImage" prefHeight="25.0" prefWidth="149.0" text="Cargar imagen">
                            <font>
                               <Font name="Times New Roman Bold" size="15.0" />
                            </font>
                         </Button>
+                        <ComboBox fx:id="cbSelectArtist" layoutX="372.0" layoutY="34.0" prefHeight="25.0" prefWidth="175.0" promptText="Seleccione un artista" />
                      </children>
                   </AnchorPane>
             </content>

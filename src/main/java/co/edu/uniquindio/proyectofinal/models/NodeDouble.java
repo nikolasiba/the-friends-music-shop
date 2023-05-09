@@ -1,6 +1,9 @@
 package co.edu.uniquindio.proyectofinal.models;
 
-public class NodeDouble {
+import java.io.Serializable;
+
+public class NodeDouble implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     Song song;
     NodeDouble last;

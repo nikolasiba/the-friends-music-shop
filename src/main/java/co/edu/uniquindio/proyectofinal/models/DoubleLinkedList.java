@@ -1,6 +1,9 @@
 package co.edu.uniquindio.proyectofinal.models;
 
-public class DoubleLinkedList {
+import java.io.Serializable;
+
+public class DoubleLinkedList implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     NodeDouble header;
 

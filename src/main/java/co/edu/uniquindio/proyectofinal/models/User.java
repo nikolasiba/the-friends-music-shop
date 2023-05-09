@@ -75,9 +75,9 @@ public class User {
             users.add(userLogin);
         }
 
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).userName.equals(userName) && users.get(i).getPassword().equals( password)) {
-                type = users.get(i).getType();
+        for (User user : users) {
+            if (user.userName.equals(userName) && user.getPassword().equals(password)) {
+                type = user.getType();
             }
 
         }

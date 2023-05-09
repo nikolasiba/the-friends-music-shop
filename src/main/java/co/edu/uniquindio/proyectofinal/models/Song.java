@@ -1,5 +1,13 @@
 package co.edu.uniquindio.proyectofinal.models;
 
+import co.edu.uniquindio.proyectofinal.persistence.UsefullFile;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
 public class Song {
 
     String code;
@@ -101,5 +109,69 @@ public class Song {
                 ", gender='" + gender + '\'' +
                 ", url='" + url + '\'' +
                 '}';
+    }
+
+
+    public boolean createSong(String name, String album, String image, String year, String duration, String gender, String url) throws IOException {
+
+
+        Date currentDate = new Date();
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyyMMddHHmmss");
+        String code = formatDate.format(currentDate);
+
+        if (!validateExistence(code)) {
+            Song song = new Song();
+
+            song.setCode(code);
+            song.setName(name);
+            song.setAlbum(album);
+            song.setImage(image);
+            song.setYeaar(year);
+            song.setGender(gender);
+            song.setDuration(duration);
+            song.setUrl(url);
+
+            String insert =
+                    song.getCode() + "#" +
+                    song.getName() + "#" +
+                    song.getAlbum() + "#" +
+                    song.getImage() + "#" +
+                    song.getYeaar() + "#" +
+                    song.getGender() + "#" +
+                    song.getDuration() + "#" +
+                    song.getUrl() + "\n";
+
+            UsefullFile.guardarArchivo("src/main/resources/persistence/Songs.txt", insert, true);
+            return true;
+
+        }
+        return false;
+
+
+    }
+
+    public boolean validateExistence(String code) {
+        String type = "";
+        HashMap<String, Author> authors = new HashMap<>();
+        ArrayList<String> content = null;
+        try {
+            content = UsefullFile.leerArchivo("src/main/resources/persistence/authors.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String linea = "";
+
+        for (String s : content) {
+            linea = s;
+            Author author = new Author();
+            author.setName(linea.split("#")[0]);
+            author.setCode(linea.split("#")[1]);
+            author.setType(linea.split("#")[3]);
+
+            authors.put(author.getCode(), author);
+        }
+
+        return authors.containsKey(code);
+
     }
 }
