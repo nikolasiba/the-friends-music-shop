@@ -3,18 +3,20 @@ package co.edu.uniquindio.proyectofinal.models;
 import co.edu.uniquindio.proyectofinal.persistence.UsefullFile;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
-public class Song {
+public class Song implements Serializable {
 
     String code;
     String name;
     String album;
     String image;
-    String yeaar;
+    String year;
     String duration;
     String gender;
     String url;
@@ -27,7 +29,7 @@ public class Song {
         this.name = name;
         this.album = album;
         this.image = image;
-        this.yeaar = yeaar;
+        this.year = yeaar;
         this.duration = duration;
         this.gender = gender;
         this.url = url;
@@ -65,12 +67,12 @@ public class Song {
         this.image = image;
     }
 
-    public String getYeaar() {
-        return yeaar;
+    public String getYear() {
+        return year;
     }
 
-    public void setYeaar(String yeaar) {
-        this.yeaar = yeaar;
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getDuration() {
@@ -99,79 +101,63 @@ public class Song {
 
     @Override
     public String toString() {
-        return "Song{" +
-                "code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", album='" + album + '\'' +
-                ", image='" + image + '\'' +
-                ", yeaar='" + yeaar + '\'' +
-                ", duration='" + duration + '\'' +
-                ", gender='" + gender + '\'' +
-                ", url='" + url + '\'' +
-                '}';
+        return "Song{" + "code='" + code + '\'' + ", name='" + name + '\'' + ", album='" + album + '\'' + ", image='" + image + '\'' + ", year='" + year + '\'' + ", duration='" + duration + '\'' + ", gender='" + gender + '\'' + ", url='" + url + '\'' + '}';
     }
 
 
-    public boolean createSong(String name, String album, String image, String year, String duration, String gender, String url) throws IOException {
+    public boolean createSong(String name, String album, String image, String year, String duration, String gender, String url, String author) {
 
-
-        Date currentDate = new Date();
-        SimpleDateFormat formatDate = new SimpleDateFormat("yyyyMMddHHmmss");
-        String code = formatDate.format(currentDate);
-
-        if (!validateExistence(code)) {
-            Song song = new Song();
-
-            song.setCode(code);
-            song.setName(name);
-            song.setAlbum(album);
-            song.setImage(image);
-            song.setYeaar(year);
-            song.setGender(gender);
-            song.setDuration(duration);
-            song.setUrl(url);
-
-            String insert =
-                    song.getCode() + "#" +
-                    song.getName() + "#" +
-                    song.getAlbum() + "#" +
-                    song.getImage() + "#" +
-                    song.getYeaar() + "#" +
-                    song.getGender() + "#" +
-                    song.getDuration() + "#" +
-                    song.getUrl() + "\n";
-
-            UsefullFile.guardarArchivo("src/main/resources/persistence/Songs.txt", insert, true);
-            return true;
-
-        }
-        return false;
-
-
-    }
-
-    public boolean validateExistence(String code) {
-        String type = "";
-        HashMap<String, Author> authors = new HashMap<>();
-        ArrayList<String> content = null;
+        ArrayList<Author> authors = new ArrayList<>();
+        HashMap<String, Author> content = new HashMap<>();
         try {
-            content = UsefullFile.leerArchivo("src/main/resources/persistence/authors.txt");
-        } catch (IOException e) {
+            authors = (ArrayList<Author>) UsefullFile.cargarRecursoSerializado("src/main/resources/persistence/Authors.txt");
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String linea = "";
-
-        for (String s : content) {
-            linea = s;
-            Author author = new Author();
-            author.setName(linea.split("#")[0]);
-            author.setCode(linea.split("#")[1]);
-            author.setType(linea.split("#")[3]);
-
-            authors.put(author.getCode(), author);
+        if (authors != null) {
+            for (Author author1 : authors) {
+                content.put(author1.getName(), author1);
+            }
+            authors.clear();
         }
 
-        return authors.containsKey(code);
+
+        for (Map.Entry<String, Author> entry : content.entrySet()) {
+
+            String key = entry.getKey();
+            Author currentAuthor = entry.getValue();
+            if (currentAuthor.getName().equals(author)) {
+                Date currentDate = new Date();
+                SimpleDateFormat formatDate = new SimpleDateFormat("yyyyMMddHHmmss");
+                String code = formatDate.format(currentDate);
+                Song song = new Song();
+                song.setCode(code);
+                song.setName(name);
+                song.setAlbum(album);
+                song.setImage(image);
+                song.setYear(year);
+                song.setGender(gender);
+                song.setDuration(duration);
+                song.setUrl(url);
+                currentAuthor.getSongsList().addSong(song);
+
+            }
+        }
+        try {
+
+            for (Map.Entry<String, Author> entry : content.entrySet()) {
+
+                String key = entry.getKey();
+                Author currentAuthor = entry.getValue();
+                authors.add(currentAuthor);
+
+            }
+            UsefullFile.salvarRecursoSerializado("src/main/resources/persistence/Authors.txt", authors);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 }

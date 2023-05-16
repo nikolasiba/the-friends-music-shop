@@ -4,10 +4,12 @@ import co.edu.uniquindio.proyectofinal.persistence.UsefullFile;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Author implements Serializable {
+    private static final long serialVersionUID = 1L;
 
 
     String code;
@@ -95,24 +97,26 @@ public class Author implements Serializable {
                     authors.add(author);
                     try {
                         UsefullFile.salvarRecursoSerializado("src/main/resources/persistence/authors.txt", authors);
+                        return true;
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        return false;
                     }
                 } else {
                     ArrayList<Author> authors1 = new ArrayList<>();
                     authors1.add(author);
                     try {
                         UsefullFile.salvarRecursoSerializado("src/main/resources/persistence/authors.txt", authors1);
+                        return true;
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        return false;
                     }
 
                 }
 
-                return true;
+
             }
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            return false;
         }
         return false;
     }
@@ -127,7 +131,7 @@ public class Author implements Serializable {
             for (Author author : content) {
                 authors.put(author.getName(), author);
             }
-        }else {
+        } else {
             return false;
         }
 
@@ -149,4 +153,30 @@ public class Author implements Serializable {
 
 
     }
+
+    public ArrayList<Song> getAllSongs() {
+        ArrayList<Author> authors;
+        ArrayList<Song> aux = new ArrayList<>();
+
+        try {
+            authors = (ArrayList<Author>) UsefullFile.cargarRecursoSerializado("src/main/resources/persistence/authors.txt");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if(authors != null ){
+            for (Author author : authors) {
+                NodeDouble currentNode = author.getSongsList().header;
+
+                while (currentNode != null) {
+                    aux.add(currentNode.getSong());
+                    currentNode = currentNode.getNext();
+                }
+
+            }
+        }
+        return aux;
+
+
+    }
+
 }

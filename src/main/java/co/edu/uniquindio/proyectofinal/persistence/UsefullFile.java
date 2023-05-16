@@ -77,7 +77,7 @@ public  class UsefullFile {
     public static void salvarRecursoSerializado(String rutaArchivo, Object object)	throws Exception {
         ObjectOutputStream oos = null;
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo));
+            oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo, false));
             oos.writeObject(object);
         } catch (Exception e) {
             throw e;

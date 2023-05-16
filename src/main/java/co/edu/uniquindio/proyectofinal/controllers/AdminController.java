@@ -51,6 +51,12 @@ public class AdminController {
 
     @FXML
     private Button btnCreateSong;
+    @FXML
+    private Button btnCreateAuthor;
+
+    @FXML
+    private Button btnCheckAuthor;
+
 
     @FXML
     private TextField txtCodeArtist;
@@ -62,7 +68,7 @@ public class AdminController {
     private TextField txtUrl;
 
     @FXML
-    void createArtist(ActionEvent event) throws IOException {
+    void createAuthor(ActionEvent event) throws IOException {
 
         if (txtNameArtist.getText().equals("")) {
 
@@ -87,6 +93,8 @@ public class AdminController {
 
             if (test) {
                 ArrayList<Author> array = author.getAuthors();
+                items.clear();
+
                 for (Author element : array) {
                     items.add(element.getName());
                 }
@@ -139,18 +147,41 @@ public class AdminController {
         } else if (txtUrl.getText().equals("")) {
             Alert alert = createAlert("El campo album no puede estar vacio");
             alert.showAndWait();
+        } else if (cbSelectArtist.getValue() == null) {
+            Alert alert = createAlert("El campo artista no puede estar vacio");
+            alert.showAndWait();
 
-        }else {
-            boolean test = song.createSong(txtNameSong.getText(), txtAlbum.getText() , selectedFile.getName() , txtYear.getText(), txtDuration.getText(),txtGender.getText(), txtUrl.getText()  );
+        } else {
+            boolean test = song.createSong(txtNameSong.getText(), txtAlbum.getText(), selectedFile.getName(), txtYear.getText(), txtDuration.getText(), txtGender.getText(), txtUrl.getText(), cbSelectArtist.getValue());
             Alert alert;
-            if (test){
+            if (test) {
+                txtNameSong.setText("");
+                txtAlbum.setText("");
+                selectedFile = null;
+                txtYear.setText("");
+                txtDuration.setText("");
+                txtGender.setText("");
+                txtUrl.setText("");
+                cbSelectArtist.getSelectionModel().clearSelection();
+                cbSelectArtist.setPromptText("Seleccione un artista");
+
                 alert = createAlert("todo correcto");
-            }else {
+            } else {
                 alert = createAlert("hubo un error ");
             }
             alert.showAndWait();
         }
 
+
+    }
+
+    @FXML
+    void checkGender(ActionEvent event) {
+
+    }
+
+    @FXML
+    void checkAuthor(ActionEvent event) {
 
     }
 
@@ -188,13 +219,14 @@ public class AdminController {
         Author author = new Author();
 
         ArrayList<Author> array = author.getAuthors();
+        if (array != null) {
+            for (Author element : array) {
 
-
-        for (Author element : array) {
-
-            items.add(element.getName());
+                items.add(element.getName());
+            }
+            cbSelectArtist.setItems(items);
         }
-        cbSelectArtist.setItems(items);
+
 
         assert btnLoadImage != null : "fx:id=\"btnLoadImage\" was not injected: check your FXML file 'admin_view.fxml'.";
         assert txtTypeArtist != null : "fx:id=\"txtTypeArtist\" was not injected: check your FXML file 'admin_view.fxml'.";
@@ -209,6 +241,9 @@ public class AdminController {
         assert txtCodeArtist != null : "fx:id=\"txtCodeArtist\" was not injected: check your FXML file 'admin_view.fxml'.";
         assert txtGender != null : "fx:id=\"txtGender\" was not injected: check your FXML file 'admin_view.fxml'.";
         assert txtUrl != null : "fx:id=\"txtUrl\" was not injected: check your FXML file 'admin_view.fxml'.";
+        assert btnCreateAuthor != null : "fx:id=\"btnCreateAuthor\" was not injected: check your FXML file 'admin_view.fxml'.";
+        assert btnCheckAuthor != null : "fx:id=\"btnCheckAuthor\" was not injected: check your FXML file 'admin_view.fxml'.";
+
 
     }
 

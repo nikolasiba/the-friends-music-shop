@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -8,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="562.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.proyectofinal.controllers.AdminController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.proyectofinal.controllers.AdminController">
    <children>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
@@ -16,36 +17,43 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="547.0">
                      <children>
-                        <ImageView fitHeight="373.0" fitWidth="600.0" layoutX="-1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="-1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <image>
-                              <Image url="@../images/createArtist.jpg" />
+                              <Image url="@../images/create.jpg" />
                            </image>
+                           <effect>
+                              <Lighting bumpInput="$null" diffuseConstant="0.84" specularConstant="0.25">
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
                         </ImageView>
-                        <TextField fx:id="txtCodeArtist" layoutX="185.0" layoutY="61.0" />
-                        <Label layoutX="31.0" layoutY="62.0" prefHeight="17.0" prefWidth="85.0" text="Codigo" textFill="WHITE">
+                        <TextField fx:id="txtCodeArtist" layoutX="347.0" layoutY="41.0" />
+                        <Label layoutX="193.0" layoutY="42.0" prefHeight="17.0" prefWidth="85.0" text="Codigo" textFill="WHITE">
                            <font>
                               <Font name="Times New Roman Bold" size="21.0" />
                            </font>
                         </Label>
-                        <Label layoutX="31.0" layoutY="119.0" prefHeight="17.0" prefWidth="85.0" text="Nombre" textFill="WHITE">
+                        <Label layoutX="193.0" layoutY="99.0" prefHeight="17.0" prefWidth="85.0" text="Nombre" textFill="WHITE">
                            <font>
                               <Font name="Times New Roman Bold" size="21.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtNameArtist" layoutX="185.0" layoutY="118.0" />
-                        <TextField fx:id="txtNationality" layoutX="179.0" layoutY="174.0" />
-                        <Label layoutX="31.0" layoutY="234.0" prefHeight="17.0" prefWidth="85.0" text="Tipo" textFill="WHITE">
+                        <TextField fx:id="txtNameArtist" layoutX="347.0" layoutY="98.0" />
+                        <TextField fx:id="txtNationality" layoutX="341.0" layoutY="154.0" />
+                        <Label layoutX="193.0" layoutY="214.0" prefHeight="17.0" prefWidth="85.0" text="Tipo" textFill="WHITE">
                            <font>
                               <Font name="Times New Roman Bold" size="21.0" />
                            </font>
                         </Label>
-                        <Label layoutX="31.0" layoutY="174.0" prefHeight="25.0" prefWidth="136.0" text="Nacionalidad" textFill="WHITE">
+                        <Label layoutX="193.0" layoutY="154.0" prefHeight="25.0" prefWidth="136.0" text="Nacionalidad" textFill="WHITE">
                            <font>
                               <Font name="Times New Roman Bold" size="22.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtTypeArtist" layoutX="179.0" layoutY="234.0" />
-                        <Button fx:id="btnCreateSong" layoutX="193.0" layoutY="285.0" mnemonicParsing="false" onAction="#createArtist" prefHeight="51.0" prefWidth="120.0" text="Crear artista">
+                        <TextField fx:id="txtTypeArtist" layoutX="341.0" layoutY="214.0" />
+                        <Button fx:id="btnCreateAuthor" layoutX="254.0" layoutY="284.0" mnemonicParsing="false" onAction="#createAuthor" prefHeight="51.0" prefWidth="120.0" text="Crear artista">
                            <font>
                               <Font name="Times New Roman Bold" size="14.0" />
                            </font>
@@ -58,10 +66,20 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ImageView fitHeight="388.0" fitWidth="569.0" layoutX="-3.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="-3.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <image>
-                              <Image url="@../images/createSong1.jpg" />
+                              <Image url="@../images/song.jpg" />
                            </image>
+                           <effect>
+                              <Lighting>
+                                 <bumpInput>
+                                    <Shadow />
+                                 </bumpInput>
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
                         </ImageView>
                         <Label layoutX="49.0" layoutY="21.0" prefHeight="24.0" prefWidth="94.0" text="Nombre" textFill="WHITE">
                            <font>
@@ -121,7 +139,23 @@
           </Tab>
             <Tab text="Consultas">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="400.0" fitWidth="600.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <image>
+                              <Image url="@../images/search.jpg" />
+                           </image>
+                           <effect>
+                              <Lighting bumpInput="$null">
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
+                        </ImageView>
+                        <Button fx:id="btnCheckGender" layoutX="55.0" layoutY="266.0" mnemonicParsing="false" onAction="#checkGender" prefHeight="37.0" prefWidth="150.0" text="Consultar Genero" AnchorPane.bottomAnchor="68.0" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="395.0" AnchorPane.topAnchor="266.0" />
+                        <Button fx:id="btnCheckAuthor" layoutX="405.0" layoutY="266.0" mnemonicParsing="false" onAction="#checkAuthor" prefHeight="37.0" prefWidth="150.0" text="Consultar Artista" AnchorPane.bottomAnchor="68.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="266.0" />
+                     </children></AnchorPane>
               </content>
             </Tab>
         </tabs>

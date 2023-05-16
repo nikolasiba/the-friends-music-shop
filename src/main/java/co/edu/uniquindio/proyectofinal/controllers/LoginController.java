@@ -53,7 +53,7 @@ public class LoginController {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/admin_view.fxml"));
 
                     Scene scene = new Scene(fxmlLoader.load());
-                    stage.setTitle("Login");
+                    stage.setTitle("Admin");
                     stage.setScene(scene);
                     // Obtiene la escena actual
                     Scene currentScene = ((Node) event.getSource()).getScene();
@@ -67,8 +67,26 @@ public class LoginController {
                     e.printStackTrace();
                 }
                 //JOptionPane.showMessageDialog(null, "hola admin");
-            } else if (test.equals("user")) {
-                //JOptionPane.showMessageDialog(null, "hola user");
+            } else {
+
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/user_view.fxml"));
+
+                    Scene scene = new Scene(fxmlLoader.load());
+                    stage.setTitle("User");
+                    stage.setScene(scene);
+                    // Obtiene la escena actual
+                    Scene currentScene = ((Node) event.getSource()).getScene();
+                    // Obtiene el Stage actual
+                    Stage currentStage = (Stage) currentScene.getWindow();
+                    // Cierra el Stage actual
+                    currentStage.close();
+                    stage.show();
+                    //((Node)(event.getSource())).getScene().getWindow().hide();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
             }
 
