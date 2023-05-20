@@ -10,19 +10,19 @@ import co.edu.uniquindio.proyectofinal.models.Song;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 public class UserController {
 
-    ObservableList<Song> authorsList = FXCollections.observableArrayList();
+    ObservableList<Song> songsList = FXCollections.observableArrayList();
+    ObservableList<Author> authorsList = FXCollections.observableArrayList();
 
     @FXML
     private ResourceBundle resources;
@@ -37,7 +37,20 @@ public class UserController {
     private ListView<Song> listViewFavorites;
 
     @FXML
-    private ListView<Song> listViewAuthors;
+    private ListView<Author> listViewAuthors;
+
+    @FXML
+    void OnClickSongs(MouseEvent event) {
+        Song song = new Song();
+        song = songsList.get(0);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Imagen cargada correctamente.", ButtonType.OK);
+        alert.setTitle("Éxito");
+        alert.setHeaderText(null);
+        alert.setContentText(song.toString());
+        alert.showAndWait();
+
+
+    }
 
 
     @FXML
@@ -46,12 +59,13 @@ public class UserController {
         assert listViewFavorites != null : "fx:id=\"listViewFavorites\" was not injected: check your FXML file 'user_view.fxml'.";
         assert listViewAuthors != null : "fx:id=\"listViewAuthors\" was not injected: check your FXML file 'user_view.fxml'.";
         Author author = new Author();
-
+        ArrayList<Author> authors = author.getAuthors();
         ArrayList<Song> test = author.getAllSongs();
-        authorsList.addAll(test);
+        authorsList.addAll(authors);
+        songsList.addAll(test);
 
-
-        listviewSongs.setItems(authorsList);
+        listViewAuthors.setItems(authorsList);
+        listviewSongs.setItems(songsList);
 
         listviewSongs.setCellFactory(new Callback<ListView<Song>, ListCell<Song>>() {
             @Override
@@ -62,6 +76,11 @@ public class UserController {
                     final Label label2 = new Label();
                     final Label label3 = new Label();
                     final HBox hbox = new HBox(imageView, new VBox(label1, label2, label3));
+                    {
+                        hbox.setPadding(new Insets(20, 20, 20, 20));
+
+                        hbox.setSpacing(20);
+                    }
 
                     @Override
                     public void updateItem(Song song, boolean empty) {
@@ -90,6 +109,49 @@ public class UserController {
             }
         });
 
+        listViewAuthors.setCellFactory(new Callback<ListView<Author>, ListCell<Author>>() {
+            @Override
+            public ListCell<Author> call(ListView<Author> listView) {
+                return new ListCell<Author>() {
+                    final ImageView imageView = new ImageView();
+                    final Label label1 = new Label();
+                    final Label label2 = new Label();
+                    final Label label3 = new Label();
+                    final HBox hbox = new HBox(imageView, new VBox(label1, label2, label3));
+
+                    {
+                        hbox.setPadding(new Insets(20, 20, 20, 20));
+
+                        hbox.setSpacing(10);
+                    }
+
+
+                    @Override
+                    public void updateItem(Author author, boolean empty) {
+                        super.updateItem(author, empty);
+                        if (empty || author == null) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            // Configurar la imagen
+                            Image image = new Image(Objects.requireNonNull(getClass().getResource("/images/user.jpg")).toString());
+                            imageView.setFitHeight(100);
+                            imageView.setFitWidth(100);
+                            imageView.setImage(image);
+
+                            // Configurar los textos
+                            label1.setText(author.getName());
+                            label2.setText(author.getType());
+                            label3.setText(author.getCode());
+
+                            // Agregar la imagen y los textos al HBox
+                            hbox.getChildren().setAll(imageView, new VBox(label1, label2, label3));
+                            setGraphic(hbox);
+                        }
+                    }
+                };
+            }
+        });
     }
 
 
