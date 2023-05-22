@@ -44,5 +44,6 @@
             <Image url="@../images/threeFriends.png" />
          </image>
       </ImageView>
+      <Button fx:id="createUser" layoutX="567.0" layoutY="256.0" mnemonicParsing="false" onAction="#CreateUser" text="create" />
    </children>
 </AnchorPane>

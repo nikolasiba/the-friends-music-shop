@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.proyectofinal.controllers.CreateUserController">
+   <children>
+      <TextField fx:id="txtUserName" layoutX="206.0" layoutY="114.0" />
+      <TextField fx:id="txtPassword" layoutX="206.0" layoutY="175.0" />
+      <Button fx:id="btnCreateUser" layoutX="255.0" layoutY="254.0" mnemonicParsing="false" onAction="#createUSer" text="Button" />
+      <ComboBox fx:id="cbType" layoutX="402.0" layoutY="127.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>

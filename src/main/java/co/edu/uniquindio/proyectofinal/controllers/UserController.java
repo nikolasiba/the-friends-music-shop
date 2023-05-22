@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyectofinal.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -7,20 +8,38 @@ import java.util.ResourceBundle;
 
 import co.edu.uniquindio.proyectofinal.models.Author;
 import co.edu.uniquindio.proyectofinal.models.Song;
+import co.edu.uniquindio.proyectofinal.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class UserController {
 
+    private String user;
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+
+    ObservableList<Song> favoritesList = FXCollections.observableArrayList();
     ObservableList<Song> songsList = FXCollections.observableArrayList();
     ObservableList<Author> authorsList = FXCollections.observableArrayList();
 
@@ -40,15 +59,87 @@ public class UserController {
     private ListView<Author> listViewAuthors;
 
     @FXML
-    void OnClickSongs(MouseEvent event) {
-        Song song = new Song();
-        song = songsList.get(0);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Imagen cargada correctamente.", ButtonType.OK);
-        alert.setTitle("Éxito");
-        alert.setHeaderText(null);
-        alert.setContentText(song.toString());
-        alert.showAndWait();
+    void OnClickSongs(MouseEvent event) throws IOException {
+        Stage stage = new Stage();
 
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/song_web_view.fxml"));
+        Parent root = fxmlLoader.load();
+
+        SongWebViewController songWebViewController = fxmlLoader.getController();
+        songWebViewController.setPrimaryStage(stage);
+
+        Scene scene = new Scene(root);
+        stage.setTitle("Admin");
+        stage.setScene(scene);
+
+        stage.setOnCloseRequest(e -> {
+            songWebViewController.stopPlayback();
+        });
+
+        stage.show();
+
+        Song selectedSong = listviewSongs.getSelectionModel().getSelectedItem();
+        if (selectedSong != null) {
+            songWebViewController.playSong(selectedSong.getUrl());
+        }
+    }
+    public void loadFavorites(String currentUser) throws IOException {
+        User user = new User();
+        ArrayList<Song> arrayList = new ArrayList<>();
+        arrayList = user.loadFavorites(currentUser);
+
+        favoritesList.setAll(arrayList);
+        listViewFavorites.setItems(favoritesList);
+
+        listViewFavorites.setCellFactory(new Callback<ListView<Song>, ListCell<Song>>() {
+            @Override
+            public ListCell<Song> call(ListView<Song> listView) {
+                return new ListCell<Song>() {
+                    final ImageView imageView = new ImageView();
+                    final Label label1 = new Label();
+                    final Label label2 = new Label();
+                    final Label label3 = new Label();
+
+
+
+                    final HBox hbox = new HBox(imageView, new VBox(label1, label2, label3));
+
+                    {
+                        hbox.setAlignment(Pos.CENTER_LEFT);
+
+                        hbox.setPadding(new Insets(20, 20, 20, 20));
+
+                        hbox.setSpacing(20);
+                        //hbox.getChildren().addAll(imageView, new VBox(label1, label2, label3), favoriteButton);
+
+                    }
+
+                    @Override
+                    public void updateItem(Song song, boolean empty) {
+                        super.updateItem(song, empty);
+                        if (empty || song == null) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            // Configurar la imagen
+                            Image image = new Image(Objects.requireNonNull(getClass().getResource("/images/" + song.getImage())).toString());
+                            imageView.setFitHeight(100);
+                            imageView.setFitWidth(100);
+                            imageView.setImage(image);
+
+                            // Configurar los textos
+                            label1.setText("Name: " + song.getName());
+                            label2.setText("Gender: " + song.getGender());
+                            label3.setText("Album: " + song.getAlbum());
+
+                            // Agregar la imagen y los textos al HBox
+                            hbox.getChildren().setAll(imageView, new VBox(label1, label2, label3));
+                            setGraphic(hbox);
+                        }
+                    }
+                };
+            }
+        });
 
     }
 
@@ -75,11 +166,39 @@ public class UserController {
                     final Label label1 = new Label();
                     final Label label2 = new Label();
                     final Label label3 = new Label();
-                    final HBox hbox = new HBox(imageView, new VBox(label1, label2, label3));
+
+                    final Button favoriteButton = new Button();
+
                     {
+                        favoriteButton.setOnAction(actionEvent -> {
+                            User user = new User();
+
+                            try {
+                                user.saveFavorite(getUser(), getItem());
+                               ArrayList<Song> arrayList = user.loadFavorites(getUser());
+                                favoritesList.setAll(arrayList);
+                                listViewFavorites.setItems(favoritesList);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        });
+
+                        favoriteButton.setPrefWidth(130);
+                        favoriteButton.setPrefHeight(30);
+
+                        favoriteButton.setText("add to favorites");
+                    }
+
+                    final HBox hbox = new HBox(imageView, new VBox(label1, label2, label3), favoriteButton);
+
+                    {
+                        hbox.setAlignment(Pos.CENTER_LEFT);
+
                         hbox.setPadding(new Insets(20, 20, 20, 20));
 
                         hbox.setSpacing(20);
+                        //hbox.getChildren().addAll(imageView, new VBox(label1, label2, label3), favoriteButton);
+
                     }
 
                     @Override
@@ -96,12 +215,12 @@ public class UserController {
                             imageView.setImage(image);
 
                             // Configurar los textos
-                            label1.setText(song.getName());
-                            label2.setText(song.getGender());
-                            label3.setText(song.getAlbum());
+                            label1.setText("Name: " + song.getName());
+                            label2.setText("Gender: " + song.getGender());
+                            label3.setText("Album: " + song.getAlbum());
 
                             // Agregar la imagen y los textos al HBox
-                            hbox.getChildren().setAll(imageView, new VBox(label1, label2, label3));
+                            hbox.getChildren().setAll(imageView, new VBox(label1, label2, label3), favoriteButton);
                             setGraphic(hbox);
                         }
                     }
@@ -140,9 +259,9 @@ public class UserController {
                             imageView.setImage(image);
 
                             // Configurar los textos
-                            label1.setText(author.getName());
-                            label2.setText(author.getType());
-                            label3.setText(author.getCode());
+                            label1.setText("Name: " + author.getName());
+                            label2.setText("type: " + author.getType());
+                            label3.setText("Code: " + author.getCode());
 
                             // Agregar la imagen y los textos al HBox
                             hbox.getChildren().setAll(imageView, new VBox(label1, label2, label3));
@@ -152,6 +271,10 @@ public class UserController {
                 };
             }
         });
+
+
+
+
     }
 
 

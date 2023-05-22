@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyectofinal.persistence;
 
+import javax.swing.*;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
@@ -74,16 +75,11 @@ public  class UsefullFile {
     }
 
 
-    public static void salvarRecursoSerializado(String rutaArchivo, Object object)	throws Exception {
-        ObjectOutputStream oos = null;
-        try {
-            oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo, false));
+    public static void salvarRecursoSerializado(String rutaArchivo, Object object) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo, false))) {
             oos.writeObject(object);
         } catch (Exception e) {
-            throw e;
-        } finally {
-            if (oos != null)
-                oos.close();
+            JOptionPane.showMessageDialog(null, e);
         }
     }
 

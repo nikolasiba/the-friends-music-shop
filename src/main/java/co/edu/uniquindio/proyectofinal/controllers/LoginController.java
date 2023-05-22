@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 public class LoginController {
 
     @FXML
+    private Button createUser;
+    @FXML
     private ResourceBundle resources;
 
     @FXML
@@ -37,6 +39,25 @@ public class LoginController {
     @FXML
     private TextField txtPassword;
 
+    @FXML
+    void CreateUser(ActionEvent event) {
+        Stage stage = new Stage();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/createUser.fxml"));
+
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setTitle("create user");
+            stage.setScene(scene);
+            // Obtiene la escena actual
+            Scene currentScene = ((Node) event.getSource()).getScene();
+            stage.show();
+            //((Node)(event.getSource())).getScene().getWindow().hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     @FXML
     void singIn(ActionEvent event) throws IOException {
@@ -48,7 +69,7 @@ public class LoginController {
             JOptionPane.showMessageDialog(null, "los Campos no pueden estar vacios");
         } else {
             test = userLogin.singIn(txtUserName.getText(), txtPassword.getText());
-            if (test.equals("admin")) {
+            if (test.equals("Admin")) {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/admin_view.fxml"));
 
@@ -66,13 +87,16 @@ public class LoginController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //JOptionPane.showMessageDialog(null, "hola admin");
             } else {
 
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/user_view.fxml"));
 
                     Scene scene = new Scene(fxmlLoader.load());
+
+                    UserController userController = fxmlLoader.getController();
+                    userController.setUser(txtUserName.getText());
+
                     stage.setTitle("User");
                     stage.setScene(scene);
                     // Obtiene la escena actual
@@ -80,8 +104,10 @@ public class LoginController {
                     // Obtiene el Stage actual
                     Stage currentStage = (Stage) currentScene.getWindow();
                     // Cierra el Stage actual
-                    currentStage.close();
+
                     stage.show();
+                    userController.loadFavorites(txtUserName.getText());
+                    currentStage.close();
                     //((Node)(event.getSource())).getScene().getWindow().hide();
                 } catch (IOException e) {
                     e.printStackTrace();

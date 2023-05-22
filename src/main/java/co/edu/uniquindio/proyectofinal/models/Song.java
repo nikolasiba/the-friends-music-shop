@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Song implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     String code;
     String name;
@@ -102,6 +103,24 @@ public class Song implements Serializable {
     @Override
     public String toString() {
         return "Song{" + "code='" + code + '\'' + ", name='" + name + '\'' + ", album='" + album + '\'' + ", image='" + image + '\'' + ", year='" + year + '\'' + ", duration='" + duration + '\'' + ", gender='" + gender + '\'' + ", url='" + url + '\'' + '}';
+    }
+
+    public Song createSongFromString(String songString) {
+        String[] songAttributes = songString.split("#");
+        if (songAttributes.length < 8) {
+            return null; // No se pueden crear correctamente los atributos de la canción
+        }
+
+        String code = songAttributes[0];
+        String name = songAttributes[1];
+        String album = songAttributes[2];
+        String image = songAttributes[3];
+        String year = songAttributes[4];
+        String duration = songAttributes[5];
+        String gender = songAttributes[6];
+        String url = songAttributes[7];
+
+        return new Song(code, name, album, image, year, duration, gender, url);
     }
 
 

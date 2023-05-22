@@ -5,6 +5,7 @@ module co.edu.uniquindio.proyectofinal {
         requires org.controlsfx.controls;
     requires java.desktop;
     requires java.logging;
+    requires javafx.web;
 
     opens co.edu.uniquindio.proyectofinal to javafx.fxml;
     exports co.edu.uniquindio.proyectofinal;
