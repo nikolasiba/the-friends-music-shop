@@ -88,8 +88,8 @@ public class User implements Serializable {
 
     }
 
-    public void saveFavorite(String currentUser, Song song) throws IOException {
-        String type = "";
+    public boolean saveFavorite(String currentUser, Song song) throws IOException {
+        boolean  flag = false;
         ArrayList<User> users = new ArrayList<User>();
         ArrayList<String> contenido = null;
         try {
@@ -100,14 +100,20 @@ public class User implements Serializable {
         if (users != null) {
             for (User user : users) {
                 if (user.getUserName().equals(currentUser)) {
-                    user.getCircularLinkedList().insert(song);
+                    if(user.getCircularLinkedList().contains(song.getCode())){
+                        flag = false;
+                    }
+                    else{
+                        user.getCircularLinkedList().insert(song);
+                        flag = true;
+                    }
                 }
             }
         }
 
         UsefullFile.salvarRecursoSerializado("src/main/resources/persistence/Users.txt", users);
 
-
+        return flag;
     }
 
 
@@ -173,7 +179,7 @@ public class User implements Serializable {
 
             user.setUserName(userName);
             user.setPassword(password);
-            user.setType("123");
+            user.setType(type);
             users.add(user);
         }
 
@@ -182,6 +188,23 @@ public class User implements Serializable {
 
 
         return true;
+    }
+
+    public ArrayList<User> getAllUser() {
+        ArrayList<User> content = new ArrayList<>();
+        ArrayList<User> users = new ArrayList<User>();
+        try {
+            content = (ArrayList<User>) UsefullFile.cargarRecursoSerializado("src/main/resources/persistence/Users.txt");
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (content != null) {
+            users.addAll(content);
+        }
+
+    return users;
+
     }
 
 

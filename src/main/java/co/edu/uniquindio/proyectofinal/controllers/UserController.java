@@ -1,20 +1,19 @@
 package co.edu.uniquindio.proyectofinal.controllers;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.ResourceBundle;
-
 import co.edu.uniquindio.proyectofinal.models.Author;
 import co.edu.uniquindio.proyectofinal.models.Song;
 import co.edu.uniquindio.proyectofinal.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -43,11 +42,6 @@ public class UserController {
     ObservableList<Song> songsList = FXCollections.observableArrayList();
     ObservableList<Author> authorsList = FXCollections.observableArrayList();
 
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private ListView<Song> listviewSongs;
@@ -57,6 +51,48 @@ public class UserController {
 
     @FXML
     private ListView<Author> listViewAuthors;
+    @FXML
+    private Button btnLogOut;
+
+
+    @FXML
+    void onClickArtist(MouseEvent event) throws IOException {
+        Stage stage = new Stage();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/song_artist.fxml"));
+        Parent root = fxmlLoader.load();
+
+        SongsArtistController songsArtistController = fxmlLoader.getController();
+
+        Author author = listViewAuthors.getSelectionModel().getSelectedItem();
+        String test = getUser();
+        songsArtistController.setUser(test);
+        songsArtistController.setAuthor(author.getName());
+        songsArtistController.setCells();
+        Scene scene = new Scene(root);
+        stage.setTitle("Canciones");
+        stage.setScene(scene);
+        stage.show();
+
+    }
+    @FXML
+    void logOut(ActionEvent event) throws IOException {
+        Stage stage = new Stage();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/login_view.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Admin");
+        stage.setScene(scene);
+        // Obtiene la escena actual
+        Scene currentScene = ((Node) event.getSource()).getScene();
+        // Obtiene el Stage actual
+        Stage currentStage = (Stage) currentScene.getWindow();
+        // Cierra el Stage actual
+        currentStage.close();
+        stage.show();
+
+    }
 
     @FXML
     void OnClickSongs(MouseEvent event) throws IOException {
@@ -79,6 +115,31 @@ public class UserController {
         stage.show();
 
         Song selectedSong = listviewSongs.getSelectionModel().getSelectedItem();
+        if (selectedSong != null) {
+            songWebViewController.playSong(selectedSong.getUrl());
+        }
+    }
+    @FXML
+    void OnClickFavorite(MouseEvent event) throws IOException {
+        Stage stage = new Stage();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/song_web_view.fxml"));
+        Parent root = fxmlLoader.load();
+
+        SongWebViewController songWebViewController = fxmlLoader.getController();
+        songWebViewController.setPrimaryStage(stage);
+
+        Scene scene = new Scene(root);
+        stage.setTitle("Admin");
+        stage.setScene(scene);
+
+        stage.setOnCloseRequest(e -> {
+            songWebViewController.stopPlayback();
+        });
+
+        stage.show();
+
+        Song selectedSong = listViewFavorites.getSelectionModel().getSelectedItem();
         if (selectedSong != null) {
             songWebViewController.playSong(selectedSong.getUrl());
         }
@@ -174,10 +235,28 @@ public class UserController {
                             User user = new User();
 
                             try {
-                                user.saveFavorite(getUser(), getItem());
-                               ArrayList<Song> arrayList = user.loadFavorites(getUser());
-                                favoritesList.setAll(arrayList);
-                                listViewFavorites.setItems(favoritesList);
+                                boolean test = user.saveFavorite(getUser(), getItem());
+                                if (test){
+                                    ArrayList<Song> arrayList = user.loadFavorites(getUser());
+                                    favoritesList.setAll(arrayList);
+                                    listViewFavorites.setItems(favoritesList);
+                                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Information");
+                                    alert.setHeaderText(null);
+
+                                    alert.setContentText("Se anadio a favoritos");
+
+                                    alert.showAndWait();
+                                }else{
+                                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setTitle("Information");
+                                    alert.setHeaderText(null);
+
+                                    alert.setContentText("no se anadio a favoritos ya existe");
+
+                                    alert.showAndWait();
+                                }
+
                             } catch (IOException ex) {
                                 throw new RuntimeException(ex);
                             }

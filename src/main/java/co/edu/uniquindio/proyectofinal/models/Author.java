@@ -163,7 +163,7 @@ public class Author implements Serializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        if(authors != null ){
+        if (authors != null) {
             for (Author author : authors) {
                 NodeDouble currentNode = author.getSongsList().header;
 
@@ -176,6 +176,34 @@ public class Author implements Serializable {
         }
         return aux;
 
+
+    }
+
+    public ArrayList<Song> getSongAuthor(String name) {
+
+        ArrayList<Author> authors;
+        ArrayList<Song> aux = new ArrayList<>();
+
+        try {
+            authors = (ArrayList<Author>) UsefullFile.cargarRecursoSerializado("src/main/resources/persistence/authors.txt");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (authors != null) {
+            for (Author author : authors) {
+                if (author.getName().equals(name)) {
+                    NodeDouble currentNode = author.getSongsList().header;
+
+                    while (currentNode != null) {
+                        aux.add(currentNode.getSong());
+                        currentNode = currentNode.getNext();
+                    }
+
+                }
+
+            }
+        }
+        return aux;
 
     }
 

@@ -160,5 +160,6 @@
             </Tab>
         </tabs>
       </TabPane>
+      <Button fx:id="btnLogOut" mnemonicParsing="false" onAction="#logOut" text="Cerrar sesion" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="5.0" />
    </children>
 </AnchorPane>

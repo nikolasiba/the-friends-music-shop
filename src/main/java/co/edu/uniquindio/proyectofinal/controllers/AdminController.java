@@ -1,13 +1,16 @@
 package co.edu.uniquindio.proyectofinal.controllers;
 
-import co.edu.uniquindio.proyectofinal.models.Author;
-import co.edu.uniquindio.proyectofinal.models.Song;
+import co.edu.uniquindio.proyectofinal.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import javax.sound.sampled.spi.AudioFileReader;
 import java.io.File;
@@ -16,11 +19,15 @@ import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminController {
 
     ObservableList<String> items = FXCollections.observableArrayList();
     File selectedFile;
+    @FXML
+    private Button btnLogOut;
 
     @FXML
     private Button btnLoadImage;
@@ -66,6 +73,29 @@ public class AdminController {
 
     @FXML
     private TextField txtUrl;
+
+    @FXML
+    void logOut(ActionEvent event) {
+        Stage stage = new Stage();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/login_view.fxml"));
+
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        stage.setTitle("Admin");
+        stage.setScene(scene);
+        // Obtiene la escena actual
+        Scene currentScene = ((Node) event.getSource()).getScene();
+        // Obtiene el Stage actual
+        Stage currentStage = (Stage) currentScene.getWindow();
+        // Cierra el Stage actual
+        currentStage.close();
+        stage.show();
+    }
 
     @FXML
     void createAuthor(ActionEvent event) throws IOException {
@@ -177,13 +207,109 @@ public class AdminController {
 
     @FXML
     void checkGender(ActionEvent event) {
+        Author author = new Author();
+        ArrayList<Song> songs = author.getAllSongs();
+
+        Map<String, Integer> genreCountMap = new HashMap<>();
+
+
+        for (Song song : songs) {
+            String genre = song.getGender();
+
+
+            if (genreCountMap.containsKey(genre)) {
+
+                int count = genreCountMap.get(genre);
+                genreCountMap.put(genre, count + 1);
+            } else {
+
+                genreCountMap.put(genre, 1);
+            }
+        }
+        String genreWithMostSongs = "";
+        int maxSongCount = 0;
+
+        for (Map.Entry<String, Integer> entry : genreCountMap.entrySet()) {
+            String genre = entry.getKey();
+            int songCount = entry.getValue();
+
+            if (songCount > maxSongCount) {
+                maxSongCount = songCount;
+                genreWithMostSongs = genre;
+            }
+        }
+
+        // Imprimir el género con la mayor cantidad de canciones
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+
+        alert.setContentText("El genero con mas canciones es: " + genreWithMostSongs);
+
+        alert.showAndWait();
 
     }
 
     @FXML
     void checkAuthor(ActionEvent event) {
+        User user = new User();
+        Author author = new Author();
 
+        ArrayList<Author> authors = author.getAuthors();
+        ArrayList<User> users = user.getAllUser();
+
+        Map<Author, Integer> reconocimientoArtistas = new HashMap<>();
+
+        for (Author artista : authors) {
+            int reconocimiento = 0;
+
+            // Recorrer la lista circular doblemente enlazada de canciones del artista
+            NodeDouble current = artista.getSongsList().getHeader();
+            do {
+                // Verificar si la canción es favorita para algún usuario
+                for (User usuario : users) {
+                    CircularLinkedList listaCircular = usuario.getCircularLinkedList();
+                    if (listaCircular.getHead() != null) {
+                        if (listaCircular.contains(current.getSong().getCode())) {
+                            reconocimiento++;
+                            // No es necesario seguir buscando en los usuarios
+                        }
+                    }
+                }
+
+                // Avanzar al siguiente nodo en la lista circular
+                current = current.getNext();
+            } while (current != null);
+
+            // Almacenar el contador de reconocimiento del artista
+            reconocimientoArtistas.put(artista, reconocimiento);
+        }
+
+        // Encontrar el artista más reconocido
+        Author artistaMasReconocido = null;
+        int maxReconocimiento = 0;
+        for (Map.Entry<Author, Integer> entry : reconocimientoArtistas.entrySet()) {
+            Author artista = entry.getKey();
+            int reconocimiento = entry.getValue();
+            if (reconocimiento > maxReconocimiento) {
+                artistaMasReconocido = artista;
+                maxReconocimiento = reconocimiento;
+            }
+        }
+
+        // Imprimir el artista más reconocido
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(null);
+        if (artistaMasReconocido != null) {
+            alert.setContentText("Artista más reconocido: " + artistaMasReconocido.getName());
+        } else {
+            alert.setContentText("No se encontró un artista más reconocido.");
+        }
+
+        alert.showAndWait();
     }
+
 
     @FXML
     void loadImage(ActionEvent event) throws IOException {

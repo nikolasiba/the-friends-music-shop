@@ -7,6 +7,15 @@ public class DoubleLinkedList implements Serializable {
 
     NodeDouble header;
 
+
+    public NodeDouble getHeader() {
+        return header;
+    }
+
+    public void setHeader(NodeDouble header) {
+        this.header = header;
+    }
+
     public void addSong(Song song) {
         NodeDouble newNode = new NodeDouble(song);
 

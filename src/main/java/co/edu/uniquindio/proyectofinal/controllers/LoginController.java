@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
@@ -65,8 +66,14 @@ public class LoginController {
         Stage stage = new Stage();
 
         User userLogin = new User();
-        if (txtUserName.getText().equals("") && txtPassword.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "los Campos no pueden estar vacios");
+        if (txtUserName.getText().equals("") || txtPassword.getText().equals("")) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+
+            alert.setContentText("Los cmapos deben estar completos");
+
+            alert.showAndWait();
         } else {
             test = userLogin.singIn(txtUserName.getText(), txtPassword.getText());
             if (test.equals("Admin")) {
@@ -87,7 +94,7 @@ public class LoginController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
+            } else if (test.equals("user")) {
 
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/user_view.fxml"));
@@ -114,6 +121,14 @@ public class LoginController {
                 }
 
 
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText(null);
+
+                alert.setContentText("Usuario o contrasena incorrecta");
+
+                alert.showAndWait();
             }
 
 

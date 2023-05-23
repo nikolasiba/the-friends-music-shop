@@ -84,4 +84,20 @@ public class CircularLinkedList implements Serializable {
         return sb.toString();
     }
 
+    public boolean contains(String songCode) {
+        if (isEmpty()) {
+            return false;
+        }
+
+        Node current = head;
+        do {
+            if (current.getData().getCode().equals(songCode)) {
+                return true;
+            }
+            current = current.getNext();
+        } while (current != head);
+
+        return false;
+    }
+
 }
