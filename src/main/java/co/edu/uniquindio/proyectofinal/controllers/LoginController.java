@@ -75,7 +75,7 @@ public class LoginController {
 
             alert.showAndWait();
         } else {
-            test = userLogin.singIn(txtUserName.getText(), txtPassword.getText());
+            test = userLogin.signIn(txtUserName.getText(), txtPassword.getText());
             if (test.equals("Admin")) {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/admin_view.fxml"));

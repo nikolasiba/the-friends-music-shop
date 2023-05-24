@@ -6,6 +6,7 @@ import co.edu.uniquindio.proyectofinal.persistence.UsefullFile;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -67,25 +68,30 @@ public class User implements Serializable {
                 '}';
     }
 
-    public String singIn(String userName, String password) throws IOException {
+    public String signIn(String userName, String password) throws IOException {
         String type = "";
-        ArrayList<User> users = new ArrayList<User>();
-        ArrayList<String> contenido = null;
+        HashMap<String, User> users = new HashMap<>();
+        ArrayList<User> userList = null;
         try {
-            users = (ArrayList<User>) UsefullFile.cargarRecursoSerializado("src/main/resources/persistence/Users.txt");
+            userList = (ArrayList<User>) UsefullFile.cargarRecursoSerializado("src/main/resources/persistence/Users.txt");
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        if (users != null) {
-            for (User user : users) {
-                if (user.getUserName().equals(userName) && user.getPassword().equals(password)) {
-                    type = user.getType();
-                }
+
+        if (userList != null) {
+            for (User user : userList) {
+                users.put(user.getUserName(), user);
+            }
+        }
+
+        if (users.containsKey(userName)) {
+            User user = users.get(userName);
+            if (user.getPassword().equals(password)) {
+                type = user.getType();
             }
         }
 
         return type;
-
     }
 
     public boolean saveFavorite(String currentUser, Song song) throws IOException {
